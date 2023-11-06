@@ -42,28 +42,22 @@ class AdminDaoImp : AdminDao {
 
     override suspend fun removeFlights(flightNumber: String): Message {
         val flight = gettingFlightId(flightNumber)
-        println("    $flight")
         val result = DatabaseFactory.dbQuery {
             BookingTable.deleteWhere { flightId.eq(flight) } or FlightsTable.deleteWhere {
                 FlightsTable.flightNumber.eq(flightNumber)
             }
         } > 0
-
-        println("       $result   ")
         return if (result) successFlightRemoval
         else failureFlight
     }
 
     override suspend fun removePassenger(passengerName: PassengerName): Message {
         val passId = gettingPassengerId(passengerName.name)
-        println("  $passId")
         val result = DatabaseFactory.dbQuery {
             BookingTable.deleteWhere { passengerId.eq(passId) } or PassengersTable.deleteWhere {
                 name.eq(passengerName.name)
             }
         } > 0
-
-        println("   $result  ")
         return if (result) successPassenger
         else failurePassenger
     }
