@@ -3,7 +3,7 @@ package com.example.service
 import com.example.dao.BookingSystemDao
 import com.example.exceptions.DatabaseException
 import com.example.exceptions.FlightNotFoundException
-import com.example.exceptions.PassengersNotFound
+import com.example.exceptions.PassengersNotFoundException
 import com.example.models.Flight
 import com.example.models.FlightDet
 import com.example.models.Message
@@ -16,7 +16,6 @@ import org.koin.core.component.inject
 
 class BookingSystemServices:KoinComponent {
     private val bookingObject by inject<BookingSystemDao>()
-
     suspend fun bookFlight(passName:String,flightNumber:String):Message {
         try {
             return bookingObject.bookingFlight(passName, flightNumber)
@@ -41,7 +40,7 @@ class BookingSystemServices:KoinComponent {
         try {
             return bookingObject.getTotalTravelTime(passName)
         }catch (e:Exception){
-            throw PassengersNotFound(failurePassenger.text,HttpStatusCode.NotFound)
+            throw PassengersNotFoundException(failurePassenger.text,HttpStatusCode.NotFound)
         }
     }
 
@@ -53,7 +52,12 @@ class BookingSystemServices:KoinComponent {
         }
     }
 
-    suspend fun passengerDetails(passName:String):Passenger?{
-        return bookingObject.passDetails(passName)
+    suspend fun passengerDetails(passName:String):Passenger {
+        try {
+            return bookingObject.passDetails(passName)
+        }catch (e:Exception)
+        {
+            throw PassengersNotFoundException(failurePassenger.text,HttpStatusCode.NotFound)
+        }
     }
 }

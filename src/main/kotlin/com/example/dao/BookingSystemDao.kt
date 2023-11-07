@@ -11,6 +11,6 @@ interface BookingSystemDao {
     suspend fun getBookedFlight(passName: String): ArrayList<Flight>
     suspend fun getTotalTravelTime(passName: String): Message
     suspend fun searchFlight(flightDet: FlightDet): Array<Flight>
-    suspend fun passDetails(passName: String): Passenger?
+    suspend fun passDetails(passName: String): Passenger
 
 }

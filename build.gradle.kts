@@ -46,7 +46,10 @@ dependencies {
 
     implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+    implementation("io.ktor:ktor-server-status-pages:$ktor_version")
+
     implementation ("org.postgresql:postgresql:42.2.27")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.0")
     implementation("io.ktor:ktor-client-content-negotiation-jvm")
+    implementation("io.ktor:ktor-server-call-logging:$ktor_version")
 }

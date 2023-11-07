@@ -19,30 +19,37 @@ fun Route.adminRoute() {
     route(ADMIN_PATH) {
         post(FLIGHT_PATH) {
             val request = call.receive<Flight>()
+            call.application.environment.log.info("request data received")
             call.respond(HttpStatusCode.Created, adminOnj.addingFlights(request))
         }
 
         delete(FLIGHT_PATH) {
             val request = call.receive<FlightNumber>()
+            call.application.environment.log.info("request data received")
             call.respond(adminOnj.removingFlights(request.number))
         }
 
         post(PASS_PATH) {
             val request = call.receive<PassengerName>()
+            call.application.environment.log.info("request data received")
             call.respond(HttpStatusCode.Created, adminOnj.addingPassengers(request))
         }
 
         delete(PASS_PATH) {
+
             val request = call.receive<PassengerName>()
+            call.application.environment.log.info("request data received")
             call.respond(adminOnj.removingPassengers(request))
         }
 
         get(PASS_PATH) {
             call.respond(adminOnj.gettingAllPass())
+            call.application.environment.log.info("responce submitted successfully")
         }
 
         get(FLIGHT_PATH) {
             call.respond(adminOnj.gettingAllFlights())
+            call.application.environment.log.info("responce submitted successfully")
         }
     }
 }

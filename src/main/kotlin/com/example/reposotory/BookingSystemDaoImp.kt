@@ -76,9 +76,9 @@ class BookingSystemDaoImp : BookingSystemDao {
         }.toTypedArray()
     }
 
-    override suspend fun passDetails(passName: String): Passenger? {
+    override suspend fun passDetails(passName: String): Passenger {
         return DatabaseFactory.dbQuery {
             PassengersTable.select { PassengersTable.name.eq(passName) }.map { rowToPassenger(it) }
-        }.singleOrNull()
+        }.single()
     }
 }

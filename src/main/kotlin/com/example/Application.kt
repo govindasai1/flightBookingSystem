@@ -13,4 +13,5 @@ fun Application.module() {
     koin()
     configureSerialization()
     configureRouting()
+    configStatusPage()
 }
