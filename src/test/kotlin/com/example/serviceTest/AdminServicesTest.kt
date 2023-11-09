@@ -2,14 +2,13 @@ package com.example.serviceTest
 
 import com.example.databaseTest.DatabaseTest
 import com.example.di.koinModule
-import com.example.models.Message
 import com.example.service.AdminServices
+import com.example.service.BookingSystemServices
 import com.example.tables.BookingTable
 import com.example.tables.FlightsTable
 import com.example.tables.PassengersTable
-import com.example.utils.flight
-import com.example.utils.passenger
-import com.example.utils.responces.successFlight
+import com.example.utils.*
+import com.example.utils.responces.*
 import kotlinx.coroutines.runBlocking
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
@@ -23,12 +22,12 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import java.sql.Connection
 import kotlin.test.assertEquals
-import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class AdminServicesTest : KoinComponent {
     private lateinit var database: Database
     private val adminServObj = AdminServices()
+    private val bookingServObj = BookingSystemServices()
 
     @Before
     fun start() {
@@ -37,6 +36,7 @@ class AdminServicesTest : KoinComponent {
         TransactionManager.manager.defaultIsolationLevel = Connection.TRANSACTION_REPEATABLE_READ
         transaction(database) {
             SchemaUtils.create(FlightsTable, PassengersTable, BookingTable)
+            TestMock.init()
         }
     }
 
@@ -54,38 +54,75 @@ class AdminServicesTest : KoinComponent {
     }
 
     @Test
-    fun addingPassengers() = runBlocking {
-        val result = adminServObj.addingPassengers(passenger)
-        if (result.equals(Message)) assertTrue(true)
-        else assertFalse(false)
+    fun addingPassengers(): Unit = runBlocking {
+        adminServObj.addingPassengers(passenger1).apply {
+            assertTrue(this.text.isNotEmpty())
+        }
     }
 
     @Test
-    fun gettingAllPass() = runBlocking {
-        val result = adminServObj.gettingAllPass()
-        if (result.isNotEmpty()) assertTrue(true)
-        else assertFalse(false)
+    fun gettingAllPass(): Unit = runBlocking {
+        adminServObj.gettingAllPass().apply {
+            assertTrue(this.isNotEmpty())
+        }
+
     }
 
     @Test
-    fun gettingAllFlights() = runBlocking {
-        val result = adminServObj.gettingAllFlights()
-        if (result.isNotEmpty()) assertTrue(true)
-        else assertFalse(false)
+    fun gettingAllFlights(): Unit = runBlocking {
+        adminServObj.gettingAllFlights().apply {
+            assertTrue(this.isNotEmpty())
+        }
     }
 
     @Test
-    fun removingFlights() = runBlocking {
-        val result = adminServObj.removingFlights("123456")
-        if (result.equals(Message)) assertTrue(true)
-        else assertFalse(false)
+    fun bookingFlightTest() = runBlocking {
+        val result = bookingServObj.bookFlight(passenger.name, "123567")
+        assertEquals(result.text, successFlightBook.text)
     }
 
     @Test
-    fun removingPassengers() = runBlocking {
-        val result = adminServObj.removingPassengers(passenger)
-        if (result.equals(Message)) assertTrue(true)
-        else assertFalse(false)
+    fun getTotalTimeTest() = runBlocking {
+        val result = bookingServObj.getTotalTime(passenger.name)
+        assertTrue(result.text.isNotEmpty())
+    }
+
+    @Test
+    fun searchFlightTest() = runBlocking {
+        val result = bookingServObj.searchFlight(flightDet)
+        assertTrue(result.isNotEmpty())
+    }
+
+    @Test
+    fun getBookedFlight() = runBlocking {
+        val result = bookingServObj.getBookedFlights(passenger.name)
+        assertTrue(result.isNotEmpty())
+    }
+
+    @Test
+    fun passDetailsTest() = runBlocking {
+        val result = bookingServObj.passengerDetails(passenger.name)
+        assertEquals(result.name, passenger.name)
+    }
+
+    @Test
+    fun cancelFlightTest() = runBlocking {
+        val result = bookingServObj.cancelFlight(passenger.name, "123567")
+        assertEquals(result.text, successFlightCancel.text)
+    }
+
+    @Test
+    fun removingFlights(): Unit = runBlocking {
+        adminServObj.removingFlights("123567").apply {
+            assertEquals(this, successFlightRemoval)
+        }
+    }
+
+    @Test
+    fun removingPassengers(): Unit = runBlocking {
+        adminServObj.removingPassengers(passenger).apply {
+            assertEquals(this, successPassenger)
+        }
     }
 
 }

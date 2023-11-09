@@ -1,6 +1,6 @@
 package com.example.exceptions
 
-import io.ktor.http.*
+import io.ktor.http.HttpStatusCode
 
 class DuplicateFlightException(val text:String,val code:HttpStatusCode):RuntimeException()
 class FlightNotFoundException(val text: String,val code: HttpStatusCode):RuntimeException()

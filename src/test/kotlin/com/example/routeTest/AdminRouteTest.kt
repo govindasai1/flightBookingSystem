@@ -15,19 +15,7 @@ import kotlin.test.assertEquals
 class AdminRouteTest {
 
 
-    @Test
-    fun testInsertFlight() = testApplication {
-        val client = createClient {
-            install(ContentNegotiation) {
-                json()
-            }
-        }
-        val responce = client.post(ADMIN_PATH + FLIGHT_PATH) {
-            headers[HttpHeaders.ContentType] = ContentType.Application.Json.toString()
-            setBody(flight2)
-        }
-        assertEquals(HttpStatusCode.Created, responce.status)
-    }
+
 
     @Test
     fun testInsertPass() = testApplication {

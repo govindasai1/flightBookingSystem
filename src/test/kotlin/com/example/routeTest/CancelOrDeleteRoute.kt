@@ -9,7 +9,6 @@ import com.example.utils.passNameFlightNo
 import com.example.utils.passenger
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
-import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.testing.*
@@ -56,7 +55,6 @@ class CancelOrDeleteRoute {
             headers[HttpHeaders.ContentType] = ContentType.Application.Json.toString()
             setBody(flightNumber)
         }
-        println("        ${responce.bodyAsText()}")
         assertEquals(HttpStatusCode.OK, responce.status)
     }
 

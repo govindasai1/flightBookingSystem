@@ -9,7 +9,6 @@ import com.example.models.Flight
 import com.example.models.Message
 import com.example.models.Passenger
 import com.example.models.PassengerName
-import com.example.reposotory.AdminDaoImp
 import com.example.utils.responces.failureFlight
 import io.ktor.http.*
 import org.koin.core.component.KoinComponent
@@ -17,7 +16,6 @@ import org.koin.core.component.inject
 
 class AdminServices : KoinComponent {
     private val adminObject by inject<AdminDao>()
-    val aa=AdminDaoImp()
 
     suspend fun addingFlights(flight: Flight): Message {
         try {
