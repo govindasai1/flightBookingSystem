@@ -47,7 +47,4 @@ object TestMock{
             it[this.flightId] = flightId
         }.value
     }
-
-
-
 }
